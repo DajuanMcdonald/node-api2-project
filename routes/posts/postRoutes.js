@@ -86,10 +86,25 @@ router.get('/:id', (req, res) => {
         .catch(err => {
             res.status(500).json({error: "The posts information could not be retrieved."})
         })
+        // id !== req.params.id || !id ? res.status(404).json({message: "The post with the specified ID does not exist."}) :
+        
+        // or post with id (postWithId)
     }
-    // id !== req.params.id || !id ? res.status(404).json({message: "The post with the specified ID does not exist."}) :
-    
-    // or post with id (postWithId)
+
+    // When the client makes a `GET` request to `/api/posts/:id/comments`:
+    router.get('/:id/comments', (req, res) => {
+
+        const id = req.params.id;
+        if(!id) {
+            res.status(404).json({message: "The post with the specified ID does not exist."})
+        } else {
+            db.findCommentById(id)
+            .then(comment => {
+                res.status(200).json(comment)
+            })
+            .catch(err => res.status(500).json({message: "The post information could not be retrieved."}))
+        }
+    })
 })
 
 
