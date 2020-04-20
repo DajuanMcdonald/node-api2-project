@@ -30,6 +30,19 @@ router.post('/', (req, res) => {
     .catch(err => res.status(500).json({message: `Server error`}))
 })
 
+// When the client makes a `POST` request to `/api/posts/:id/comments`:
+router.post('/:id/comments', (req, res) => {
+    const body = req.body;
+
+
+    db.insertComment(body)
+    .then(comment => {
+        res.status(201).json(comment)
+    })
+    .catch( err => res.status(500).json({message: "There was an error while saving the post to the database"}))
+
+})
+
 //When the client makes a `GET` request to `/api/posts`:
 router.get('/', (req, res) => {
     db.find()
