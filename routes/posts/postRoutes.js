@@ -12,13 +12,14 @@ router.use(express.json());
 
 //When the client makes a `POST` request to `/api/posts`:
 router.post('/', (req, res) => {
-    const {body} = req.body;
+    const body = req.body;
     
     if(!body.title || !body.contents) {
         //cancel the request.
-        res.end();
+        
         //respond with HTTP status code `400` (Bad Request).
-        res.status(400).json({errorMessage: "Please provide title and contents for the post."});
+        res.status(400).json({errorMessage: "Please provide title and contents for the post."})
+        .end();
     }
     console.log(req.body)
 
