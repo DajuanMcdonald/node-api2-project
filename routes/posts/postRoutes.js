@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
     }
     console.log(req.body)
 
-    db.update(body)
+    db.insert(body)
     .then(post => {
        res.status(201).json(post) 
     })
