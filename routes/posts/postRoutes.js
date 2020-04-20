@@ -33,13 +33,22 @@ router.post('/', (req, res) => {
 // When the client makes a `POST` request to `/api/posts/:id/comments`:
 router.post('/:id/comments', (req, res) => {
     const body = req.body;
+    const id = req.params.id;
 
+    if(!id) {
+        res.status(404).json({message: "The post with the specified ID does not exist."})
+    } else if(!body.text) {
+        res.status(400).json({errorMessage: "Please provide text for the comment."})
 
-    db.insertComment(body)
-    .then(comment => {
-        res.status(201).json(comment)
-    })
-    .catch( err => res.status(500).json({message: "There was an error while saving the post to the database"}))
+    } else {
+        
+        db.insertComment(body)
+        .then(comment => {
+             res.status(201).json(comment)
+        })
+        .catch( err => res.status(500).json({message: "There was an error while saving the post to the database"}))
+    }
+
 
 })
 
