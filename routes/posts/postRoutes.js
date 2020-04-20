@@ -47,17 +47,26 @@ router.get('/', (req, res) => {
 */
 router.get('/:id', (req, res) => {
     const id = req.params.id;
-    !id ? res.status(404).json({message: "The post with the specified ID does not exist."}) :
+    console.log('searching...')
+    if (!id || id !== req.params.id) {
+        console.log('searching failed...')
+       
+     res.status(404).json({message: 'The post with specified ID does not exist'})   
+
+    } else {
+        db.findById(id)
+
+        .then(post => {
+            
+            res.status(200).json(post);
+        })
+        .catch(err => {
+            res.status(500).json({error: "The posts information could not be retrieved."})
+        })
+    }
+    // id !== req.params.id || !id ? res.status(404).json({message: "The post with the specified ID does not exist."}) :
     
-    db.findById(id)
     // or post with id (postWithId)
-    .then(post => {
-        
-        res.status(200).json(post);
-    })
-    .catch(err => {
-        res.status(500).json({error: "The posts information could not be retrieved."})
-    })
 })
 
 
