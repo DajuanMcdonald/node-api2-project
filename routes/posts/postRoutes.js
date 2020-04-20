@@ -7,8 +7,26 @@ router.use(express.json());
 @db : data folder; contains a database populated with test `posts`.
 @route : /path/:key/ ; /:id
 @resource/path : /path/value/ ; /3
-@
+@next() : Endpoint Specifications
 */
+
+//When the client makes a `POST` request to `/api/posts`:
+router.post('/', (req, res) => {
+    const {body} = req.body;
+    
+    if(!body.title || !body.contents) {
+        //cancel the request.
+        res.end();
+        //respond with HTTP status code `400` (Bad Request).
+        res.status(400).json({errorMessage: "Please provide title and contents for the post."});
+    }
+
+    db.update()
+    .then(post => {
+       res.status(201).json(post) 
+    })
+    .catch(err => res.status(500).json({message: `Server error for ${db.params}`}))
+})
 
 //When the client makes a `GET` request to `/api/posts`:
 router.get('/', (req, res) => {
@@ -39,3 +57,6 @@ router.get('/:id', (req, res) => {
         res.status(500).json({error: "The posts information could not be retrieved."})
     })
 })
+
+
+module.exports = router;
