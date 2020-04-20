@@ -20,12 +20,13 @@ router.post('/', (req, res) => {
         //respond with HTTP status code `400` (Bad Request).
         res.status(400).json({errorMessage: "Please provide title and contents for the post."});
     }
+    console.log(req.body)
 
-    db.update()
+    db.update(body)
     .then(post => {
        res.status(201).json(post) 
     })
-    .catch(err => res.status(500).json({message: `Server error for ${db.params}`}))
+    .catch(err => res.status(500).json({message: `Server error`}))
 })
 
 //When the client makes a `GET` request to `/api/posts`:
@@ -45,13 +46,14 @@ router.get('/', (req, res) => {
 * 
 */
 router.get('/:id', (req, res) => {
-    const id = req.params.id;
+    const {id} = req.params.id;
     !id ? res.status(404).json({message: "The post with the specified ID does not exist."}) :
     
     db.findById(id)
     // or post with id (postWithId)
     .then(post => {
-        res.status(200).json(post)
+        
+        res.status(200).json(post);
     })
     .catch(err => {
         res.status(500).json({error: "The posts information could not be retrieved."})
