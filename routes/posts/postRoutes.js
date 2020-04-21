@@ -7,7 +7,8 @@ router.use(express.json());
 @db : data folder; contains a database populated with test `posts`.
 @route : /path/:key/ ; /:id
 @resource/path : /path/value/ ; /3
-@next() : Endpoint Specifications
+
+@ : Endpoint Specifications
 */
 
 //When the client makes a `POST` request to `/api/posts`:
@@ -15,8 +16,8 @@ router.post('/', (req, res) => {
     const body = req.body;
     
     if(!body.title || !body.contents) {
-        //cancel the request.
         
+        //cancel the request.
         //respond with HTTP status code `400` (Bad Request).
         res.status(400).json({errorMessage: "Please provide title and contents for the post."})
         .end();
@@ -69,9 +70,9 @@ router.get('/', (req, res) => {
 * 
 */
 router.get('/:id', (req, res) => {
-    const id = req.params.id;
+    const {id} = req.params;
     console.log('searching...')
-    if (!id || id !== req.params.id) {
+    if (!id) {
         console.log('searching failed...')
        
      res.status(404).json({message: 'The post with specified ID does not exist'})   
@@ -79,6 +80,7 @@ router.get('/:id', (req, res) => {
     } else {
         db.findById(id)
 
+        // or post with id (postWithId)
         .then(post => {
             
             res.status(200).json(post);
@@ -86,9 +88,8 @@ router.get('/:id', (req, res) => {
         .catch(err => {
             res.status(500).json({error: "The posts information could not be retrieved."})
         })
-        // id !== req.params.id || !id ? res.status(404).json({message: "The post with the specified ID does not exist."}) :
         
-        // or post with id (postWithId)
+        
     }
 
     // When the client makes a `GET` request to `/api/posts/:id/comments`:
